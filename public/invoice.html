@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Invoice — Glow & Glamour</title>
+  <link rel="icon" href="https://img.icons8.com/?size=100&id=5OcXRBmS83na&format=png&color=000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  
+  <style>
+    /* Invoice Specific Styles */
+    .invoice-page {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .invoice-card {
+      background: white;
+      padding: 50px;
+      border-radius: 20px;
+      box-shadow: var(--shadow);
+      border-top: 5px solid var(--pink-dark);
+    }
+
+    .invoice-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid var(--cream);
+    }
+
+    .invoice-header h1 {
+      font-size: 32px;
+      color: var(--pink-dark);
+      margin-bottom: 8px;
+    }
+
+    .invoice-meta {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.8;
+      text-align: right;
+    }
+
+    .invoice-section {
+      margin-bottom: 30px;
+    }
+
+    .invoice-section h3 {
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--gold);
+      margin-bottom: 12px;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 600;
+    }
+
+    .invoice-section p {
+      font-size: 15px;
+      color: var(--charcoal);
+      line-height: 1.6;
+      margin: 0;
+    }
+
+    .invoice-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 30px 0;
+    }
+
+    .invoice-table th {
+      background: var(--cream);
+      color: var(--charcoal);
+      font-weight: 600;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 14px 16px;
+      text-align: left;
+      border-bottom: 2px solid #eee;
+    }
+
+    .invoice-table td {
+      padding: 16px;
+      border-bottom: 1px solid #f0f0f0;
+      font-size: 14px;
+      color: var(--charcoal);
+    }
+
+    .invoice-table td:last-child,
+    .invoice-table th:last-child {
+      text-align: right;
+    }
+
+    .invoice-total-box {
+      background: var(--cream);
+      padding: 24px;
+      border-radius: 12px;
+      margin-top: 20px;
+    }
+
+    .invoice-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--pink-dark);
+    }
+
+    .invoice-actions {
+      display: flex;
+      gap: 15px;
+      margin-top: 40px;
+      justify-content: center;
+    }
+
+    .btn-print {
+      padding: 14px 30px;
+      background: var(--charcoal);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-print:hover {
+      background: var(--pink-dark);
+      transform: translateY(-2px);
+    }
+
+    .btn-shop {
+      padding: 14px 30px;
+      background: transparent;
+      color: var(--charcoal);
+      border: 2px solid var(--charcoal);
+      border-radius: 50px;
+      font-family: inherit;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-shop:hover {
+      background: var(--charcoal);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* PRINT STYLES: Hides website UI when printing */
+    @media print {
+      body { background: white; }
+      .navbar, .invoice-actions, .footer { display: none !important; }
+      .invoice-page { margin: 0; padding: 0; }
+      .invoice-card { box-shadow: none; border: 1px solid #eee; border-top: none; }
+    }
+
+    @media (max-width: 600px) {
+      .invoice-card { padding: 25px; }
+      .invoice-header { flex-direction: column; gap: 20px; }
+      .invoice-meta { text-align: left; }
+      .invoice-actions { flex-direction: column; }
+      .btn-print, .btn-shop { width: 100%; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="logo">Glow <span>&</span> Glamour</a>
+    <nav><a href="index.html">Shop</a></nav>
+  </header>
+
+  <main class="invoice-page" id="invoice-root">
+    <p style="text-align:center; padding:60px; color: var(--muted);">Loading your invoice...</p>
+  </main>
+
+  <footer class="footer">
+    <p>© 2026 Glow & Glamour · Premium Beauty Shop</p>
+  </footer>
+
+  <script>
+    // Read ?order=XXX from the URL
+    const params = new URLSearchParams(window.location.search);
+    const orderId = params.get("order");
+
+    if (!orderId) {
+      document.getElementById("invoice-root").innerHTML = `
+        <div class="invoice-card" style="text-align:center;">
+          <h2 style="color: var(--pink-dark); margin-bottom: 15px;">No Order Found</h2>
+          <p style="color: var(--muted); margin-bottom: 30px;">We couldn't find the order details you're looking for.</p>
+          <a href="index.html" class="btn-shop">← Back to Shop</a>
+        </div>
+      `;
+    } else {
+      fetch(`/api/orders/${orderId}/invoice`)
+        .then(async (response) => {
+          // Check if the server actually returned JSON
+          const contentType = response.headers.get("content-type");
+          if (contentType && contentType.includes("application/json")) {
+            return response.json();
+          } else {
+            // If it returned HTML (like a 404 page), read it as text to see the real error
+            const text = await response.text();
+            throw new Error(`Server returned HTML instead of JSON. Check backend. (Preview: ${text.substring(0, 150)}...)`);
+          }
+        })
+        .then(({ success, invoice, message }) => {
+          if (!success) throw new Error(message || "Invoice not found");
+          renderInvoice(invoice);
+        })
+        .catch(err => {
+          console.error("Invoice Fetch Error:", err);
+          document.getElementById("invoice-root").innerHTML = `
+            <div class="invoice-card" style="text-align:center;">
+              <h2 style="color: #c62828; margin-bottom: 15px;">Error Loading Invoice</h2>
+              <p style="color: var(--muted); margin-bottom: 10px; font-size: 14px;">${err.message}</p>
+              <p style="color: var(--muted); margin-bottom: 30px; font-size: 13px;">Requested Order ID: <strong>${orderId}</strong></p>
+              <a href="index.html" class="btn-shop">← Back to Shop</a>
+            </div>
+          `;
+        });
+    }
+
+    function renderInvoice(inv) {
+      // ... (keep your existing renderInvoice function exactly as it was)
+      const itemsRows = inv.items.map(i => `
+        <tr>
+          <td><strong>${i.productName}</strong></td>
+          <td style="text-align:center;">${i.quantity}</td>
+          <td style="text-align:right;">KSh ${i.unitPrice.toLocaleString()}</td>
+          <td style="text-align:right;">KSh ${i.subtotal.toLocaleString()}</td>
+        </tr>
+      `).join("");
+
+      const dateStr = new Date(inv.orderDate).toLocaleDateString('en-KE', { 
+        year: 'numeric', month: 'long', day: 'numeric' 
+      });
+
+      document.getElementById("invoice-root").innerHTML = `
+        <div class="invoice-card">
+          <div class="invoice-header">
+            <div>
+              <h1>Invoice</h1>
+              <p style="color: var(--muted); font-size: 14px;">${inv.invoiceId}</p>
+            </div>
+            <div class="invoice-meta">
+              <strong>Date:</strong> ${dateStr}<br>
+              <strong>Order ID:</strong> ${inv.orderId}<br>
+              <strong>Status:</strong> <span style="color: #2e7d32; font-weight: 600;">Paid</span>
+            </div>
+          </div>
+
+          <div class="invoice-section">
+            <h3>Billed To</h3>
+            <p><strong>${inv.customer.name}</strong><br>${inv.customer.email}</p>
+          </div>
+
+          <table class="invoice-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th style="text-align:center;">Qty</th>
+                <th style="text-align:right;">Unit Price</th>
+                <th style="text-align:right;">Subtotal</th>
+              </tr>
+            </thead>
+            <tbody>${itemsRows}</tbody>
+          </table>
+
+          <div class="invoice-total-box">
+            <div class="invoice-total">
+              <span>Total Paid</span>
+              <span>KSh ${inv.total.toLocaleString()}</span>
+            </div>
+            <p style="font-size: 12px; color: var(--muted); margin-top: 8px; text-align: right;">
+              Includes KSh ${inv.shippingFee.toLocaleString()} shipping fee
+            </p>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 30px;">
+            <div class="invoice-section">
+              <h3>Payment Method</h3>
+              <p>Paystack<br>Ref: ${inv.payment.reference}</p>
+            </div>
+            <div class="invoice-section">
+              <h3>Shipping Details</h3>
+              <p><strong>Pickup:</strong> ${inv.shipping.pickup}<br>
+                 <strong>Delivery:</strong> ${inv.shipping.delivery}</p>
+            </div>
+          </div>
+
+          <div class="invoice-actions">
+            <button class="btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+            <a href="index.html" class="btn-shop">← Continue Shopping</a>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>

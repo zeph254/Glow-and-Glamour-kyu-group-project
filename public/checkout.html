@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout — Glow & Glamour</title>
+  <link rel="icon" href="https://img.icons8.com/?size=100&id=5OcXRBmS83na&format=png&color=000000">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/checkout.css">
+</head>
+<body>
+
+  <!-- ===== NAVBAR ===== -->
+  <header class="navbar">
+    <a href="index.html" class="logo">Glow <span>&</span> Glamour</a>
+    <nav>
+      <a href="index.html" class="active">Shop</a>
+      <a href="orders.html">My Orders</a> <!-- NEW LINK -->
+      <a href="cart.html" class="cart-link">
+        Cart <span id="cart-count" class="badge">0</span>
+      </a>
+    </nav>
+  </header>
+
+  <main class="checkout-page">
+    <h1 class="checkout-title">Checkout</h1>
+
+    <div class="checkout-grid">
+
+      <!-- LEFT: Shipping + Payment -->
+      <section class="checkout-form-section">
+        <h2>Shipping Details</h2>
+
+        <form id="checkoutForm">
+          <label>Full Name</label>
+          <input type="text" id="name" required placeholder="Jane Wanjiku">
+
+          <label>Email (for payment receipt)</label>
+          <input type="email" id="email" required placeholder="jane@example.com">
+
+          <label>Pickup Location</label>
+          <input type="text" id="pickup" required placeholder="Glow & Glamour Store, Nairobi">
+
+          <label>Delivery Location</label>
+          <input type="text" id="delivery" required placeholder="Westlands, Nairobi">
+
+          <label>Package Description</label>
+          <input type="text" id="package" placeholder="Beauty products, handle with care">
+
+          <h2 class="payment-heading">Payment</h2>
+          <p class="paystack-note">
+            You'll be redirected to Paystack's secure checkout to complete payment.
+          </p>
+
+          <button type="submit" id="payBtn" class="btn-pay">
+            Pay Now
+          </button>
+        </form>
+      </section>
+
+      <!-- RIGHT: Order Summary -->
+      <aside class="order-summary">
+        <h2>Order Summary</h2>
+
+        <div id="summary-items" class="summary-items">
+          <!-- injected by JS -->
+        </div>
+
+        <hr>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span id="subtotal">KSh 0</span>
+        </div>
+        <div class="summary-row">
+          <span>Shipping Fee</span>
+          <span id="shipping-fee">KSh 200</span>
+        </div>
+        <div class="summary-row total">
+          <span>Total</span>
+          <span id="total">KSh 0</span>
+        </div>
+
+        <a href="cart.html" class="back-link">← Back to Cart</a>
+      </aside>
+
+    </div>
+  </main>
+
+  <!-- Toast -->
+  <div id="toast" class="toast"></div>
+
+  <!-- Paystack InlineJS V2 -->
+  <script src="https://js.paystack.co/v2/inline.js"></script>
+
+  <!-- Your scripts (order matters) -->
+  <script src="js/products.js"></script>
+  <script src="js/cart.js"></script>
+  <script src="js/checkout.js"></script>
+</body>
+</html>
