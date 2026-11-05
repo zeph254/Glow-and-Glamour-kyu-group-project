@@ -861,7 +861,6 @@ a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
   transition: color 0.3s ease;
 }
 
-.search-container input:focus + .search-icon,
 .search-container input:focus ~ .search-icon {
   color: var(--pink-dark);
 }
