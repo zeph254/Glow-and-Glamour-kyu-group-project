@@ -14,14 +14,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 const DATA_DIR = path.join(__dirname, 'data');
 const ORDERS_FILE = path.join(DATA_DIR, 'orders.json');
 
-// Ensure data directory and file exist
 if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR);
 if (!fs.existsSync(ORDERS_FILE)) fs.writeFileSync(ORDERS_FILE, '[]');
 
-// Paystack Secret Key (Use environment variable in production!)
-const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || "sk_test_1312315a496cf9321f6632340095df68df7b0fc0"; // Replace with your actual test/live key
+const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || "sk_test_1312315a496cf9321f6632340095df68df7b0fc0";
 
-// Product Database (Backend needs this to generate invoices)
 const PRODUCTS_CACHE = [
   { id: 1, name: "Rose Glow Vitamin C Serum", price: 1200 },
   { id: 2, name: "Matte Liquid Lipstick - Ruby", price: 650 },
@@ -59,7 +56,7 @@ function saveOrders(orders) {
   fs.writeFileSync(ORDERS_FILE, JSON.stringify(orders, null, 2));
 }
 
-// --- API ROUTES ---
+// --- API ROUTES (Order matters! API routes MUST come before catch-all) ---
 
 // 1. Verify Payment & Save Order
 app.post("/api/verify-payment", async (req, res) => {
@@ -146,17 +143,7 @@ app.get("/api/orders/:id/invoice", (req, res) => {
   }
 });
 
-// 3. Catch-all for frontend routing
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'index.html'));
-});
-
-// --- START SERVER ---
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-// 3. Get Order Tracking Status (Mock)
+// 3. Get Order Tracking Status (Mock) - NOW MOVED ABOVE CATCH-ALL
 app.get("/api/orders/:id/track", (req, res) => {
   try {
     const orders = readOrders();
@@ -166,14 +153,13 @@ app.get("/api/orders/:id/track", (req, res) => {
       return res.status(404).json({ success: false, message: "Order not found." });
     }
 
-    // Mock tracking logic: Generate a realistic timeline based on order date
     const orderDate = new Date(order.date);
     const now = new Date();
     const hoursSinceOrder = (now - orderDate) / (1000 * 60 * 60);
 
     let currentStatus = "Order Placed";
     let estimatedDelivery = new Date(orderDate);
-    estimatedDelivery.setDate(estimatedDelivery.getDate() + 3); // 3 days from order
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 3);
 
     const updates = [
       {
@@ -184,7 +170,7 @@ app.get("/api/orders/:id/track", (req, res) => {
       },
       {
         status: "Payment Confirmed",
-        date: new Date(orderDate.getTime() + 5 * 60000).toISOString(), // 5 mins later
+        date: new Date(orderDate.getTime() + 5 * 60000).toISOString(),
         location: "Paystack Secure Gateway",
         completed: true
       }
@@ -219,7 +205,6 @@ app.get("/api/orders/:id/track", (req, res) => {
         completed: true
       });
     } else if (currentStatus === "Out for Delivery") {
-      // Add the pending "Delivered" step
       updates.push({
         status: "Delivered",
         date: null,
@@ -227,7 +212,6 @@ app.get("/api/orders/:id/track", (req, res) => {
         completed: false
       });
     } else {
-      // Add pending steps
       updates.push({ status: "Out for Delivery", date: null, location: "Nairobi Courier Hub", completed: false });
       updates.push({ status: "Delivered", date: null, location: order.delivery || "Customer Location", completed: false });
     }
@@ -246,4 +230,14 @@ app.get("/api/orders/:id/track", (req, res) => {
     console.error("Tracking error:", error);
     res.status(500).json({ success: false, message: "Server error." });
   }
+});
+
+// 4. Catch-all for frontend routing (MUST be last!)
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'index.html'));
+});
+
+// --- START SERVER ---
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
