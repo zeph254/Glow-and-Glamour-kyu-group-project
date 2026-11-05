@@ -1,15 +1,41 @@
 /* ============================================
-   Homepage logic: render grid, filters, add-to-cart
+   Homepage logic: render grid, filters, search & add-to-cart
    ============================================ */
 
 const grid = document.getElementById("products");
+const searchInput = document.getElementById("search-input");
+const clearSearchBtn = document.getElementById("clear-search");
+
 let activeCategory = "all";
+let searchQuery = "";
+
+/* ---------- COMBINED FILTERING ---------- */
+function getFilteredProducts() {
+  let filtered = products;
+
+  // 1. Filter by category
+  if (activeCategory !== "all") {
+    filtered = filtered.filter(p => p.category === activeCategory);
+  }
+
+  // 2. Filter by search query (checks name, description, and category)
+  if (searchQuery.trim() !== "") {
+    const query = searchQuery.toLowerCase();
+    filtered = filtered.filter(p => 
+      p.name.toLowerCase().includes(query) || 
+      p.description.toLowerCase().includes(query) ||
+      p.category.toLowerCase().includes(query)
+    );
+  }
+
+  return filtered;
+}
 
 /* ---------- RENDER ---------- */
 function renderProducts(list) {
   grid.innerHTML = "";
   if (list.length === 0) {
-    grid.innerHTML = `<p class="empty">No products in this category.</p>`;
+    grid.innerHTML = `<p class="empty">No products found matching your search.</p>`;
     return;
   }
 
@@ -47,7 +73,6 @@ function renderProducts(list) {
       </div>
     `;
 
-    // Wire the add button
     const btn = card.querySelector(".btn-add");
     if (!outOfStock) {
       btn.addEventListener("click", () => {
@@ -71,8 +96,31 @@ document.querySelectorAll(".filter-btn").forEach(btn => {
 });
 
 function applyFilter() {
-  const list = getProductsByCategory(activeCategory);
-  renderProducts(list);
+  renderProducts(getFilteredProducts());
+}
+
+/* ---------- SEARCH ---------- */
+if (searchInput) {
+  searchInput.addEventListener("input", (e) => {
+    searchQuery = e.target.value;
+    
+    // Show/hide clear button
+    if (clearSearchBtn) {
+      clearSearchBtn.style.display = searchQuery.trim() !== "" ? "flex" : "none";
+    }
+    
+    applyFilter();
+  });
+}
+
+if (clearSearchBtn) {
+  clearSearchBtn.addEventListener("click", () => {
+    searchInput.value = "";
+    searchQuery = "";
+    clearSearchBtn.style.display = "none";
+    applyFilter();
+    searchInput.focus();
+  });
 }
 
 /* ---------- TOAST ---------- */
