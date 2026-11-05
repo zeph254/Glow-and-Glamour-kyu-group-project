@@ -182,9 +182,27 @@
 </head>
 <body>
 
+  <!-- ===== NAVBAR ===== -->
   <header class="navbar">
     <a href="index.html" class="logo">Glow <span>&</span> Glamour</a>
-    <nav><a href="index.html">Shop</a></nav>
+    
+    <!-- Hamburger Button -->
+    <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Desktop & Mobile Navigation -->
+    <nav class="nav-links" id="nav-links">
+      <a href="index.html" class="active">Shop</a>
+      <a href="orders.html">My Orders</a>
+      <a href="cart.html" class="cart-link">
+        Cart <span id="cart-count" class="badge">0</span>
+      </a>
+      <!-- Close button for mobile -->
+      <button class="close-menu" id="close-menu" aria-label="Close Menu">✕</button>
+    </nav>
   </header>
 
   <main class="invoice-page" id="invoice-root">
