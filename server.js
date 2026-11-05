@@ -155,3 +155,95 @@ app.get('*', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+
+// 3. Get Order Tracking Status (Mock)
+app.get("/api/orders/:id/track", (req, res) => {
+  try {
+    const orders = readOrders();
+    const order = orders.find(o => o.id === req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: "Order not found." });
+    }
+
+    // Mock tracking logic: Generate a realistic timeline based on order date
+    const orderDate = new Date(order.date);
+    const now = new Date();
+    const hoursSinceOrder = (now - orderDate) / (1000 * 60 * 60);
+
+    let currentStatus = "Order Placed";
+    let estimatedDelivery = new Date(orderDate);
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 3); // 3 days from order
+
+    const updates = [
+      {
+        status: "Order Placed",
+        date: orderDate.toISOString(),
+        location: "Glow & Glamour Online Store",
+        completed: true
+      },
+      {
+        status: "Payment Confirmed",
+        date: new Date(orderDate.getTime() + 5 * 60000).toISOString(), // 5 mins later
+        location: "Paystack Secure Gateway",
+        completed: true
+      }
+    ];
+
+    if (hoursSinceOrder > 2) {
+      currentStatus = "Processing";
+      updates.push({
+        status: "Processing & Packing",
+        date: new Date(orderDate.getTime() + 2 * 60 * 60000).toISOString(),
+        location: "Glow & Glamour Warehouse, Nairobi",
+        completed: true
+      });
+    }
+
+    if (hoursSinceOrder > 24) {
+      currentStatus = "Out for Delivery";
+      updates.push({
+        status: "Out for Delivery",
+        date: new Date(orderDate.getTime() + 24 * 60 * 60000).toISOString(),
+        location: "Nairobi Courier Hub",
+        completed: true
+      });
+    }
+
+    if (hoursSinceOrder > 72) {
+      currentStatus = "Delivered";
+      updates.push({
+        status: "Delivered",
+        date: new Date(orderDate.getTime() + 72 * 60 * 60000).toISOString(),
+        location: order.delivery || "Customer Location",
+        completed: true
+      });
+    } else if (currentStatus === "Out for Delivery") {
+      // Add the pending "Delivered" step
+      updates.push({
+        status: "Delivered",
+        date: null,
+        location: order.delivery || "Customer Location",
+        completed: false
+      });
+    } else {
+      // Add pending steps
+      updates.push({ status: "Out for Delivery", date: null, location: "Nairobi Courier Hub", completed: false });
+      updates.push({ status: "Delivered", date: null, location: order.delivery || "Customer Location", completed: false });
+    }
+
+    res.json({ 
+      success: true, 
+      tracking: {
+        orderId: order.id,
+        currentStatus,
+        estimatedDelivery: estimatedDelivery.toISOString(),
+        updates
+      }
+    });
+
+  } catch (error) {
+    console.error("Tracking error:", error);
+    res.status(500).json({ success: false, message: "Server error." });
+  }
+});
