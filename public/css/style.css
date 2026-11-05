@@ -690,7 +690,7 @@ a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
   border: none;
   cursor: pointer;
   padding: 5px;
-  z-index: 1001;
+  z-index: 1002;
 }
 .hamburger span {
   display: block;
@@ -711,6 +711,26 @@ a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
   font-size: 24px;
   color: var(--charcoal);
   cursor: pointer;
+  z-index: 1003;
+}
+
+/* Dark Overlay for Mobile Menu */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  backdrop-filter: blur(2px);
+}
+.menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
 }
 
 /* Mobile Menu Styles */
@@ -721,26 +741,27 @@ a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
   .nav-links {
     position: fixed;
     top: 0;
-    right: -100%; /* Hidden off-screen */
-    width: 70%;
-    max-width: 300px;
+    right: 0;
+    transform: translateX(100%); /* GPU-accelerated hidden state */
+    width: 75%;
+    max-width: 320px;
     height: 100vh;
     background: white;
     flex-direction: column;
     padding: 80px 30px 30px;
     box-shadow: -5px 0 20px rgba(0,0,0,0.1);
-    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-    z-index: 1000;
+    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); /* Smooth GPU transition */
+    z-index: 1001;
     gap: 20px;
   }
 
   .nav-links.active {
-    right: 0; /* Slide in */
+    transform: translateX(0); /* Slide in smoothly */
   }
 
   .nav-links a {
     font-size: 18px;
-    padding: 10px 0;
+    padding: 12px 0;
     border-bottom: 1px solid #f0f0f0;
     width: 100%;
   }
