@@ -14,7 +14,7 @@
   <link rel="icon" href="https://img.icons8.com/?size=100&id=5OcXRBmS83na&format=png&color=000000">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="css/style.css?v=3">
+  <link rel="stylesheet" href="css/style.css?v=3">
 </head>
 <body>
 
@@ -22,26 +22,20 @@
   <header class="navbar">
     <a href="index.html" class="logo">Glow <span>&</span> Glamour</a>
     
-    <!-- Hamburger Button -->
     <button class="hamburger" id="hamburger" aria-label="Toggle Menu">
-      <span></span>
-      <span></span>
-      <span></span>
+      <span></span><span></span><span></span>
     </button>
 
-    <!-- Desktop & Mobile Navigation -->
     <nav class="nav-links" id="nav-links">
       <a href="index.html" class="active">Shop</a>
       <a href="orders.html">My Orders</a>
       <a href="cart.html" class="cart-link">
         Cart <span id="cart-count" class="badge">0</span>
       </a>
-      <!-- Close button for mobile -->
       <button class="close-menu" id="close-menu" aria-label="Close Menu">✕</button>
     </nav>
   </header>
 
-  <!-- Dark overlay for mobile menu (MOVED INSIDE BODY) -->
   <div class="menu-overlay" id="menu-overlay"></div>
 
   <!-- ===== HERO ===== -->
@@ -57,26 +51,6 @@
     <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=600&h=800&fit=crop" alt="Beauty Model" class="hero-image">
   </section>
 
-  <!-- ===== SEARCH ===== -->
-  <section class="search-section">
-    <div class="search-container">
-      <!-- Search Icon SVG -->
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-      
-      <input 
-        type="text" 
-        id="search-input" 
-        placeholder="Search for serums, lipstick, hair oil..." 
-        autocomplete="off"
-      >
-      
-      <!-- Clear Button (Hidden by default) -->
-      <button id="clear-search" class="clear-search" style="display: none;" aria-label="Clear search">✕</button>
-    </div>
-  </section>
-
   <!-- ===== CATEGORIES ===== -->
   <section id="categories">
     <div class="section-title">
@@ -86,32 +60,31 @@
     <div class="categories-grid">
       <div class="category-card" onclick="filterByCategory('skincare')">
         <img src="https://images.unsplash.com/photo-1556228578-0d85b1a4d571?w=400&h=500&fit=crop" alt="Skincare">
-        <div class="category-overlay">
-          <h3>Skincare</h3>
-          <span>12 Products</span>
-        </div>
+        <div class="category-overlay"><h3>Skincare</h3><span>Premium Care</span></div>
       </div>
       <div class="category-card" onclick="filterByCategory('makeup')">
         <img src="https://images.unsplash.com/photo-1512499617640-c2f999098e95?w=400&h=500&fit=crop" alt="Makeup">
-        <div class="category-overlay">
-          <h3>Makeup</h3>
-          <span>18 Products</span>
-        </div>
+        <div class="category-overlay"><h3>Makeup</h3><span>Bold & Beautiful</span></div>
       </div>
       <div class="category-card" onclick="filterByCategory('hair')">
         <img src="https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?w=400&h=500&fit=crop" alt="Hair">
-        <div class="category-overlay">
-          <h3>Hair Care</h3>
-          <span>8 Products</span>
-        </div>
+        <div class="category-overlay"><h3>Hair Care</h3><span>Silky & Strong</span></div>
       </div>
       <div class="category-card" onclick="filterByCategory('fragrance')">
         <img src="https://images.unsplash.com/photo-1541643600914-78b084683601?w=400&h=500&fit=crop" alt="Fragrance">
-        <div class="category-overlay">
-          <h3>Fragrance</h3>
-          <span>6 Products</span>
-        </div>
+        <div class="category-overlay"><h3>Fragrance</h3><span>Signature Scents</span></div>
       </div>
+    </div>
+  </section>
+
+  <!-- ===== SEARCH ===== (MOVED HERE) -->
+  <section class="search-section">
+    <div class="search-container">
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      <input type="text" id="search-input" placeholder="Search for serums, lipstick, hair oil..." autocomplete="off">
+      <button id="clear-search" class="clear-search" style="display: none;" aria-label="Clear search">✕</button>
     </div>
   </section>
 
@@ -125,9 +98,7 @@
   </section>
 
   <!-- ===== PRODUCT GRID ===== -->
-  <main id="products" class="product-grid">
-    <!-- cards injected by shop.js -->
-  </main>
+  <main id="products" class="product-grid"></main>
 
   <!-- ===== TOAST ===== -->
   <div id="toast" class="toast"></div>
@@ -171,9 +142,7 @@
   <script src="js/shop.js"></script>
   
   <script>
-    // Helper function for category cards
     function filterByCategory(category) {
-      // Clear search when clicking a category card
       const searchInput = document.getElementById("search-input");
       const clearSearchBtn = document.getElementById("clear-search");
       if (searchInput) {
@@ -183,27 +152,18 @@
       
       document.querySelectorAll(".filter-btn").forEach(btn => {
         btn.classList.remove("active");
-        if (btn.dataset.category === category) {
-          btn.classList.add("active");
-        }
+        if (btn.dataset.category === category) btn.classList.add("active");
       });
       
-      // Update the global variable in shop.js
-      if (typeof activeCategory !== 'undefined') {
-        activeCategory = category;
-      }
+      if (typeof activeCategory !== 'undefined') activeCategory = category;
       
       const filteredProducts = getProductsByCategory(category);
-      
       document.getElementById("products").scrollIntoView({ behavior: 'smooth' });
       
-      if (typeof renderProducts === 'function') {
-        renderProducts(filteredProducts);
-      }
+      if (typeof renderProducts === 'function') renderProducts(filteredProducts);
     }
   </script>
 
-  <!-- ===== HAMBURGER MENU SCRIPT ===== -->
   <script>
     const hamburger = document.getElementById('hamburger');
     const navLinks = document.getElementById('nav-links');
@@ -215,26 +175,20 @@
       if (hamburger) hamburger.classList.toggle('active');
       if (navLinks) navLinks.classList.toggle('active');
       if (menuOverlay) menuOverlay.classList.toggle('active');
-      
-      // Prevent background scrolling when menu is open
       document.body.style.overflow = (navLinks && navLinks.classList.contains('active')) ? 'hidden' : '';
     }
 
     if (hamburger) hamburger.addEventListener('click', toggleMenu);
     if (closeMenu) closeMenu.addEventListener('click', toggleMenu);
-    if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu); // Close when clicking outside
+    if (menuOverlay) menuOverlay.addEventListener('click', toggleMenu);
 
-    // Close menu when a navigation link is clicked
     navItems.forEach(item => {
       item.addEventListener('click', () => {
-        if (navLinks && navLinks.classList.contains('active')) {
-          toggleMenu();
-        }
+        if (navLinks && navLinks.classList.contains('active')) toggleMenu();
       });
     });
   </script>
 
-  <!-- ===== PWA SERVICE WORKER ===== -->
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

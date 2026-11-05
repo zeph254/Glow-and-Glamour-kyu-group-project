@@ -34,7 +34,19 @@ const PRODUCTS_CACHE = [
   { id: 9, name: "Golden Glow Highlighter", price: 750 },
   { id: 10, name: "Coconut Sugar Body Scrub", price: 700 },
   { id: 11, name: "Vanilla Dream Body Mist", price: 900 },
-  { id: 12, name: "Precision Brow Pencil - Brown", price: 450 }
+  { id: 12, name: "Precision Brow Pencil - Brown", price: 450 },
+  { id: 13, name: "Hyaluronic Acid Hydrating Serum", price: 1400 },
+  { id: 14, name: "Niacinamide Brightening Toner", price: 950 },
+  { id: 15, name: "Retinol Anti-Aging Night Cream", price: 1800 },
+  { id: 16, name: "Invisible Sunscreen SPF 50+", price: 1200 },
+  { id: 17, name: "Waterproof Volumizing Mascara", price: 850 },
+  { id: 18, name: "Long-Wear Makeup Setting Spray", price: 700 },
+  { id: 19, name: "Rosy Cheeks Blush Palette", price: 900 },
+  { id: 20, name: "Waterproof Gel Eyeliner - Black", price: 550 },
+  { id: 21, name: "Coconut Leave-In Conditioner", price: 800 },
+  { id: 22, name: "Peppermint Scalp Scrub", price: 1000 },
+  { id: 23, name: "Biotin Hair Growth Serum", price: 1300 },
+  { id: 24, name: "Midnight Oud Wood Perfume", price: 3500 }
 ];
 
 // --- HELPERS ---
