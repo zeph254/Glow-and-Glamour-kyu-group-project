@@ -55,25 +55,7 @@
     <img src="https://images.unsplash.com/photo-1596704017254-9b121068fb31?w=600&h=800&fit=crop" alt="Beauty Model" class="hero-image">
   </section>
 
-    <!-- ===== SEARCH ===== -->
-  <section class="search-section">
-    <div class="search-container">
-      <!-- Search Icon SVG -->
-      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-      </svg>
-      
-      <input 
-        type="text" 
-        id="search-input" 
-        placeholder="Search for serums, lipstick, hair oil..." 
-        autocomplete="off"
-      >
-      
-      <!-- Clear Button (Hidden by default) -->
-      <button id="clear-search" class="clear-search" style="display: none;" aria-label="Clear search">✕</button>
-    </div>
-  </section>
+
 
   <!-- ===== CATEGORIES ===== -->
   <section id="categories">
@@ -122,6 +104,26 @@
     <button class="filter-btn" data-category="fragrance">Fragrance</button>
   </section>
 
+      <!-- ===== SEARCH ===== -->
+  <section class="search-section">
+    <div class="search-container">
+      <!-- Search Icon SVG -->
+      <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      </svg>
+      
+      <input 
+        type="text" 
+        id="search-input" 
+        placeholder="Search for serums, lipstick, hair oil..." 
+        autocomplete="off"
+      >
+      
+      <!-- Clear Button (Hidden by default) -->
+      <button id="clear-search" class="clear-search" style="display: none;" aria-label="Clear search">✕</button>
+    </div>
+  </section>
+  
   <!-- ===== PRODUCT GRID ===== -->
   <main id="products" class="product-grid">
     <!-- cards injected by shop.js -->
@@ -197,7 +199,7 @@
         renderProducts(filteredProducts);
       }
     }
-    
+
   </script>
 
   <!-- ===== HAMBURGER MENU SCRIPT ===== -->
