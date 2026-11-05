@@ -59,34 +59,35 @@ function saveOrders(orders) {
 // --- API ROUTES (Order matters! API routes MUST come before catch-all) ---
 
 // 1. Verify Payment & Save Order
+// 1. Verify Payment & Save Order
+// 1. Verify Payment & Save Order (TEMPORARY MOCK FOR TESTING)
 app.post("/api/verify-payment", async (req, res) => {
   const { reference, orderDraft } = req.body;
 
+  if (!reference || !orderDraft) {
+    return res.status(400).json({ success: false, message: "Missing reference or order data." });
+  }
+
   try {
-    const paystackRes = await axios.get(`https://api.paystack.co/transaction/verify/${reference}`, {
-      headers: { Authorization: `Bearer ${PAYSTACK_SECRET_KEY}` }
-    });
+    // ✅ SIMULATE SUCCESS: We skip the actual Paystack API call and just save the order
+    const orders = readOrders();
+    
+    const finalOrder = {
+      ...orderDraft,
+      paymentStatus: "paid",
+      paymentReference: reference || "mock-ref-" + Date.now(),
+      paystackAmount: orderDraft.total * 100, // Convert to cents/kobo for consistency
+      status: "Confirmed"
+    };
 
-    if (paystackRes.data.data.status === "success") {
-      const orders = readOrders();
-      
-      const finalOrder = {
-        ...orderDraft,
-        paymentStatus: "paid",
-        paymentReference: reference,
-        paystackAmount: paystackRes.data.data.amount,
-        status: "Confirmed"
-      };
+    orders.push(finalOrder);
+    saveOrders(orders);
 
-      orders.push(finalOrder);
-      saveOrders(orders);
-
-      return res.json({ success: true, orderId: finalOrder.id });
-    } else {
-      return res.status(400).json({ success: false, message: "Payment not successful." });
-    }
+    console.log("✅ Mock Order Saved Successfully:", finalOrder.id);
+    return res.json({ success: true, orderId: finalOrder.id });
+    
   } catch (error) {
-    console.error("Paystack verification error:", error.message);
+    console.error("❌ Mock verification error:", error.message);
     return res.status(500).json({ success: false, message: "Verification failed." });
   }
 });
