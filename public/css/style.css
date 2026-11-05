@@ -680,3 +680,115 @@ a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
     grid-template-columns: 1fr;
   }
 }
+
+/* ============ HAMBURGER MENU ============ */
+.hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  z-index: 1001;
+}
+.hamburger span {
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: var(--charcoal);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.close-menu {
+  display: none;
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: var(--charcoal);
+  cursor: pointer;
+}
+
+/* Mobile Menu Styles */
+@media (max-width: 768px) {
+  .hamburger { display: flex; }
+  .close-menu { display: block; }
+
+  .nav-links {
+    position: fixed;
+    top: 0;
+    right: -100%; /* Hidden off-screen */
+    width: 70%;
+    max-width: 300px;
+    height: 100vh;
+    background: white;
+    flex-direction: column;
+    padding: 80px 30px 30px;
+    box-shadow: -5px 0 20px rgba(0,0,0,0.1);
+    transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    z-index: 1000;
+    gap: 20px;
+  }
+
+  .nav-links.active {
+    right: 0; /* Slide in */
+  }
+
+  .nav-links a {
+    font-size: 18px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+    width: 100%;
+  }
+
+  .cart-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: none !important;
+    margin-top: 10px;
+    background: var(--pink-light);
+    padding: 15px !important;
+    border-radius: 10px;
+  }
+}
+
+/* Hamburger to 'X' Animation */
+.hamburger.active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+
+/* ============ FINAL MOBILE POLISH ============ */
+@media (max-width: 480px) {
+  /* Prevent horizontal scrolling */
+  body { overflow-x: hidden; }
+  
+  /* Make buttons easier to tap */
+  .btn-primary, .btn-secondary, .btn-add, .btn-pay, .btn-checkout {
+    min-height: 48px; 
+  }
+  
+  /* Adjust hero image for mobile */
+  .hero-image {
+    height: 400px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 16px;
+  }
+  
+  /* Make product grid 1 column on very small screens */
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
