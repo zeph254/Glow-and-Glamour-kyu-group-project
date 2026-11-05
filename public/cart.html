@@ -94,7 +94,42 @@
   <script src="js/products.js"></script>
   <script src="js/cart.js"></script>
   <script src="js/cart-page.js"></script>
-    <script>
+<!-- ===== HAMBURGER MENU SCRIPT ===== -->
+  <script>
+    const hamburger = document.getElementById('hamburger');
+    const navLinks = document.getElementById('nav-links');
+    const closeMenu = document.getElementById('close-menu');
+    const navItems = document.querySelectorAll('.nav-links a');
+
+    function toggleMenu() {
+      if (hamburger) hamburger.classList.toggle('active');
+      if (navLinks) navLinks.classList.toggle('active');
+      
+      // Prevent background scrolling when menu is open
+      if (navLinks) {
+        document.body.style.overflow = navLinks.classList.contains('active') ? 'hidden' : '';
+      }
+    }
+
+    if (hamburger) {
+      hamburger.addEventListener('click', toggleMenu);
+    }
+    if (closeMenu) {
+      closeMenu.addEventListener('click', toggleMenu);
+    }
+
+    // Close menu when a navigation link is clicked
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        if (navLinks && navLinks.classList.contains('active')) {
+          toggleMenu();
+        }
+      });
+    });
+  </script>
+
+  <!-- ===== PWA SERVICE WORKER ===== -->
+  <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('/service-worker.js')
